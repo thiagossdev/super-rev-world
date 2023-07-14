@@ -15,7 +15,7 @@ const ACCELERATION = 8.0
 const FRICTION_IN_FLOOR = 16.0
 const FRICTION_IN_AIR = 20.0
 
-const MAX_JUMPS = 3
+const MAX_JUMPS = 2
 const MAX_GEAR_VELOCITY_ERROR = 10.0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
