@@ -1,4 +1,5 @@
-extends CharacterBody2D
+class_name Player
+extends Actor2D
 
 # const SPEED = 2550.0
 # const JUMP_VELOCITY = -2000.0
@@ -18,12 +19,11 @@ const FRICTION_IN_AIR = 20.0
 const MAX_JUMPS = 2
 const MAX_GEAR_VELOCITY_ERROR = 10.0
 
-# Get the gravity from the project settings to be synced with RigidBody nodes.
-var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 const WALL_SLIDE_GRAVITY = 100
 
 @onready var _sprite = $Sprite
 @onready var _camera = $Camera2D
+@onready var _states: CharacterStateMachine = $States
 
 @export var jump_buffer_time: float = 0.1
 @export var max_gears: int = 3
@@ -48,35 +48,44 @@ func _init():
 	jump_buffer_timer = 0
 
 
+func _ready():
+	_states.init(self)
+
+
 func _physics_process(delta):
-	var acceleration = ACCELERATION
-	speed = current_gear * SPEED
+	# var acceleration = ACCELERATION
+	# speed = current_gear * SPEED
 
-	# Get the input direction and handle the movement/deceleration.
-	var direction = Input.get_axis("ui_left", "ui_right")
+	# # Get the input direction and handle the movement/deceleration.
+	# var direction = Input.get_axis("ui_left", "ui_right")
 
-	# Add the gravity.
-	if not is_on_floor():
-		velocity.y += gravity * delta
+	# # Add the gravity.
+	# if not is_on_floor():
+	# 	velocity.y += gravity * delta
 
-		if not direction:
-			velocity.x = move_toward(velocity.x, 0, FRICTION_IN_AIR)
-			print("Frinction on AIR")
-		elif abs(velocity.x) < SPEED_IN_AIR:
-			acceleration += FRICTION_IN_FLOOR
-			velocity.x = move_toward(velocity.x, direction * SPEED_IN_AIR, acceleration)
+	# 	if not direction:
+	# 		velocity.x = move_toward(velocity.x, 0, FRICTION_IN_AIR)
+	# 		print("Frinction on AIR")
+	# 	elif abs(velocity.x) < SPEED_IN_AIR:
+	# 		acceleration += FRICTION_IN_FLOOR
+	# 		velocity.x = move_toward(velocity.x, direction * SPEED_IN_AIR, acceleration)
 
-	else:
-		acceleration += FRICTION_IN_FLOOR
-		velocity.x = move_toward(velocity.x, 0, FRICTION_IN_FLOOR)
+	# else:
+	# 	acceleration += FRICTION_IN_FLOOR
+	# 	velocity.x = move_toward(velocity.x, 0, FRICTION_IN_FLOOR)
 
-		if direction:
-			velocity.x = move_toward(velocity.x, direction * speed, acceleration)
+	# 	if direction:
+	# 		velocity.x = move_toward(velocity.x, direction * speed, acceleration)
 
-	process_jump(direction)
-	process_wall_slide(delta)
-	move_and_slide()
-	process_gear(delta)
+	# process_jump(direction)
+	# process_wall_slide(delta)
+	# move_and_slide()
+	# process_gear(delta)
+	_states.physics_process(delta)
+
+
+func _unhandled_input(event):
+	_states.input(event)
 
 
 func get_direction() -> Vector2:

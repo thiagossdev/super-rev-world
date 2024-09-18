@@ -1,19 +1,19 @@
-[gd_scene load_steps=8 format=3 uid="uid://b6uboi167u15q"]
+[gd_scene load_steps=8 format=3 uid="uid://cyh57hh74xani"]
 
-[ext_resource type="Texture2D" uid="uid://c7dlu1ndvuh7q" path="res://assets/tilesets/player.png" id="1_hxm3n"]
-[ext_resource type="Script" path="res://src/actors/players/Player.gd" id="1_xjyl4"]
-[ext_resource type="Script" path="res://src/debug/DirectionVisualizer.gd" id="2_lthl7"]
+[ext_resource type="Script" path="res://src/actors/enemies/Enemy.gd" id="1_ti0jh"]
+[ext_resource type="Texture2D" uid="uid://c7dlu1ndvuh7q" path="res://assets/tilesets/player.png" id="2_d3jnj"]
+[ext_resource type="Script" path="res://src/debug/DirectionVisualizer.gd" id="3_yuhjv"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2o06k"]
-atlas = ExtResource("1_hxm3n")
+atlas = ExtResource("2_d3jnj")
 region = Rect2(0, 0, 16, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_u05kt"]
-atlas = ExtResource("1_hxm3n")
+atlas = ExtResource("2_d3jnj")
 region = Rect2(16, 0, 16, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o4etj"]
-atlas = ExtResource("1_hxm3n")
+atlas = ExtResource("2_d3jnj")
 region = Rect2(32, 0, 16, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_v2atw"]
@@ -36,9 +36,11 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Enemy" type="CharacterBody2D"]
+modulate = Color(1, 0, 0, 1)
 scale = Vector2(2, 2)
-script = ExtResource("1_xjyl4")
+script = ExtResource("1_ti0jh")
+gravity = 900.0
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_v2atw")
@@ -49,14 +51,8 @@ frame_progress = 0.206792
 position = Vector2(0, -5.6)
 polygon = PackedVector2Array(-6, 22, -6, 20, -8, 18, -8, 0, -4, -4, 4, -4, 8, 0, 8, 18, 6, 20, 6, 22)
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(1, -1)
-offset = Vector2(512, -64)
-position_smoothing_speed = 30.0
-
-[node name="DirectionVisualizer" type="Node2D" parent="." node_paths=PackedStringArray("character")]
-script = ExtResource("2_lthl7")
-character = NodePath("..")
+[node name="DirectionVisualizer" type="Node2D" parent="."]
+script = ExtResource("3_yuhjv")
 width = 1
 multiplier = 0.0501
 redraw_time = 0.05
